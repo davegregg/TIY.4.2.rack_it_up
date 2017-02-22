@@ -1,10 +1,10 @@
-class Application
+class LipsumGenerator
   attr_accessor :env, :path
 
   def initialize(env)
     @env = env
-    @path = @env["PATH_INFO"]
-    @given_num = @env["REQUEST_PATH"].match(/(\d*)\z/)[1].to_i
+    @path = @env['PATH_INFO']
+    @given_num = @env['REQUEST_PATH'].match(/(\d*)\z/)[1].to_i
     @num = [1, @given_num, 100].sort[1] #min/max limiting @num
   end
 
