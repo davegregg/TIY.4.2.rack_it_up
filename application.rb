@@ -5,42 +5,49 @@ class LipsumGenerator
     @env = env
     @path = @env['PATH_INFO']
     given_num = @env['REQUEST_PATH'].match(/(\d*)\z/)[1].to_i
-    @num = [1, given_num, 100].sort[1] #min/max limiting @num
-  end
+    @paragraph_num = [1, given_num, 100].sort[1] # minimum/maximum limiting
+  end # => :initialize
 
-  def response
-    ['200',
-     {'Content-Type' => 'text/html'},
-     [case path.downcase
-      when /\A\/lipsums/, /\A\/options/
-        HTML.header +
-        '<div style="margin: 2em;">
-           <h4>Options:</h4>
-           <ul>
-             <li><a href="lorem">Lorem Ipsum</a></li>
-             <li><a href="hipster">Hipster Ipsum</a></li>
-             <li><a href="bacon">Bacon Ipsum</a></li>
-             <li><a href="dizzle">Dizzle Ipsum</a></li>
-             <li><a href="healthcare">Healthcare Ipsum</a></li>
-           </ul>
-         </div>' +
-        HTML.footer
-      when /\A\/bacon/
-        BaconIpsum.(@num)
-      when /\A\/hipster/
-        HipsterIpsum.(@num)
-      when /\A\/dizzle/
-        DizzleIpsum.(@num)
-      when /\A\/healthcare/
-        HealthcareIpsum.(@num)
-      else
-        Lorem.(@num)
-      end]
-    ]
-  end
+  def respond
+    case path.downcase
+    when '/', /\A\/options/, /\A\/lipsums/
+      response('options')
+    when /\A\/lorem/, /\A\/ipsum/
+      response(Lorem)
+    when /\A\/bacon/
+      response(BaconIpsum)
+    when /\A\/hipster/
+      response(HipsterIpsum)
+    when /\A\/dizzle/
+      response(DizzleIpsum)
+    when /\A\/healthcare/
+      response(HealthcareIpsum)
+    when /\A\/current_time/, /\A\/time/
+      response('current_time')
+    else
+      response('invalid')
+    end
+  end # => :respond
+
+  def response(option)
+    header = { 'Content-Type' => 'text/html' }
+    go_ahead = ['200', header]
+    if option.is_a? Class
+      go_ahead << [option.call(@paragraph_num)]
+    else
+      case option
+      when 'options'
+        go_ahead << [Page.options]
+      when 'current_time'
+        go_ahead << [Page.time]
+      when 'invalid'
+        ['404', header, [Page.error404]]
+      end
+    end
+  end # => :response
 
   def self.call(env)
-    new(env).response
-  end
+    new(env).respond
+  end # => :call
 
-end
+end # => :call
