@@ -1,0 +1,1 @@
+class BaconIpsum < Ipsum; end
