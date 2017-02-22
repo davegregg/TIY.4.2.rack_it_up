@@ -1,1 +1,0 @@
-class Lorem < Ipsum; end

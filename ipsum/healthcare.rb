@@ -1,1 +1,0 @@
-class HealthcareIpsum < Ipsum; end
