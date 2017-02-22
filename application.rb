@@ -5,7 +5,7 @@ class LipsumGenerator
     @env = env
     @path = @env['PATH_INFO']
     given_num = @env['REQUEST_PATH'].match(/(\d*)\z/)[1].to_i
-    @paragraph_num = [1, given_num, 100].sort[1] # minimum/maximum limiting
+    @paragraph_num = [1, given_num, 100].sort[1]
   end # => :initialize
 
   def respond

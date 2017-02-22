@@ -1,6 +1,6 @@
 class Ipsum
 
-  def self.call(num=1)
+  def self.call(num = 1)
     paragraphs = eval("FFaker::#{self.name}.paragraphs(#{num})")
     paragraphs = paragraphs.collect{ |p| "<p>#{p}</p>" }.join
     return "#{HTML.header}" +

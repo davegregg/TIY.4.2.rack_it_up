@@ -19,7 +19,7 @@ class Page < HTML
   def self.time
     HTML.header +
       '<p>The time is now: ' +
-      Time.now.strftime('%a, %e %b %Y %H:%M:%S %z') +
+      Time.now.strftime('%a, %e %b %Y %H:%M:%S %Z') +
       '</p>' +
     HTML.footer
   end
